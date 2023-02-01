@@ -19,7 +19,7 @@ stages {
                     def image_to_push = docker.image("${registryURI}${qa_registry}:${imageTag}")
                     docker.withRegistry("https://${registryURI}",registryCredential){
                     image_to_push.push()
-                    }
+                    }  /* pull tag and push code is successful*/
                 }
             }
         }
