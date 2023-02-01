@@ -11,11 +11,15 @@ stages {
         stage('image pull') {
             steps{
                 script {
-                    def customImage = docker.image("${registryURI}${dev_registry}:${imageTag}")
+                    def image_to_pull = docker.image("${registryURI}${dev_registry}:${imageTag}")
                     docker.withRegistry("https://${registryURI}",registryCredential){
-                    customImage.pull()
+                    image_to_pull.pull()
                     }
                     sh "docker image tag '${registryURI}${dev_registry}:${imageTag}' '${registryURI}${qa_registry}:${imageTag}'"
+                    def image_to_push = docker.image("${registryURI}${qa_registry}:${imageTag}")
+                    docker.withRegistry("https://${registryURI}",registryCredential){
+                    image_to_push.push()
+                    }
                 }
             }
         }
